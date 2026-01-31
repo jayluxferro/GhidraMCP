@@ -25,8 +25,11 @@ MCP Server + Ghidra Plugin
 
 ## Prerequisites
 - Install [Ghidra](https://ghidra-sre.org)
-- Python3
-- MCP [SDK](https://github.com/modelcontextprotocol/python-sdk)
+- [uv](https://docs.astral.sh/uv/) (Python package manager)
+
+Install uv with: `curl -LsSf https://astral.sh/uv/install.sh | sh`
+
+Then sync dependencies from the project directory: `uv sync`
 
 ## Ghidra
 First, download the latest [release](https://github.com/LaurieWired/GhidraMCP/releases) from this repository. This contains the Ghidra plugin and Python MCP client. Then, you can directly import the plugin into Ghidra.
@@ -57,8 +60,9 @@ To set up Claude Desktop as a Ghidra MCP client, go to `Claude` -> `Settings` ->
 {
   "mcpServers": {
     "ghidra": {
-      "command": "python",
+      "command": "uv",
       "args": [
+        "run",
         "/ABSOLUTE_PATH_TO/bridge_mcp_ghidra.py",
         "--ghidra-server",
         "http://127.0.0.1:8080/"
@@ -79,7 +83,7 @@ The server IP and port are configurable and should be set to point to the target
 To use GhidraMCP with [Cline](https://cline.bot), this requires manually running the MCP server as well. First run the following command:
 
 ```
-python bridge_mcp_ghidra.py --transport sse --mcp-host 127.0.0.1 --mcp-port 8081 --ghidra-server http://127.0.0.1:8080/
+uv run bridge_mcp_ghidra.py --transport sse --mcp-host 127.0.0.1 --mcp-port 8081 --ghidra-server http://127.0.0.1:8080/
 ```
 
 The only *required* argument is the transport. If all other arguments are unspecified, they will default to the above. Once the MCP server is running, open up Cline and select `MCP Servers` at the top.
@@ -96,7 +100,7 @@ Another MCP client that supports multiple models on the backend is [5ire](https:
 
 1. Tool Key: ghidra
 2. Name: GhidraMCP
-3. Command: `python /ABSOLUTE_PATH_TO/bridge_mcp_ghidra.py`
+3. Command: `uv run /ABSOLUTE_PATH_TO/bridge_mcp_ghidra.py`
 
 # Building from Source
 1. Copy the following files from your Ghidra directory to this project's `lib/` directory:
